@@ -2,31 +2,6 @@
 
 server <- function(input, output, session) {
   
-  interaction <- reactive({
-    observeEvent(input$menu,{
-      if(input$menu == 'plots'){
-        selectInput(
-          inputId = "year",
-          "Year:",
-          unique(data_new$Year)
-        )
-      }
-    })
-  })
-  
-  output$interactionUI <- renderUI({ interaction() })
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   output$map <- renderLeaflet({
     tmap_mode("view")
     map <- data_new %>% 
