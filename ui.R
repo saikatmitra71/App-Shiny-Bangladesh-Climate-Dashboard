@@ -5,8 +5,8 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(id = "menu",
                 menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-                menuItem("The Map", tabName = "map", icon = icon("dashboard")),
-                menuItem("Static Plots", tabName = "plots", icon = icon("th"))
+                menuItem("The Map", tabName = "map", icon = icon("th")),
+                menuItem("Static Plots", tabName = "plots", icon = icon("bar-chart-o"))
     ),
     
     conditionalPanel(
@@ -116,7 +116,30 @@ ui <- dashboardPage(
                        valueBoxOutput("minavg", width = 3),
                        valueBoxOutput("minrain", width = 3),
                        valueBoxOutput("minhumidity", width = 3)),
-              fluidRow(box("Temperature Trend", highchartOutput("avgtempseries")))),
+              fluidRow(box(title = "Yearly Trend",
+                           selectInput(
+                             inputId = "dashlinevariable",
+                             "Variable:",
+                             c("Air Temperature (Dry Bulb)" = "Air_temp",
+                               "Maximum Temperature" = "Max",
+                               "Minimum Temperature" = "Min",
+                               "Average Temperature" = "Avg",
+                               "Rainfall" = "Rain",
+                               "Humidity" = "Humidity")
+                           ),
+                           highchartOutput("dashline")),
+                       box(title = "Monthly Distribution BoxPlot",
+                           selectInput(
+                             inputId = "dashboxvariable",
+                             "Variable:",
+                             c("Air Temperature (Dry Bulb)" = "Air_temp",
+                               "Maximum Temperature" = "Max",
+                               "Minimum Temperature" = "Min",
+                               "Average Temperature" = "Avg",
+                               "Rainfall" = "Rain",
+                               "Humidity" = "Humidity")
+                           ),
+                           plotlyOutput("dashboxplot")))),
       tabItem(tabName = "map",
               h2("The Map"),
               leafletOutput("map")

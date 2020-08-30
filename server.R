@@ -8,7 +8,8 @@ server <- function(input, output) {
       HTML(paste0("Maximum Dry Bulb", br(),
                   box_data[1,3], br(),
                   box_data[1,2], ", ", box_data[1,1])),
-      color = "red"
+      color = "red",
+      icon = icon("upload", lib = "glyphicon")
     )
   })
   
@@ -18,7 +19,8 @@ server <- function(input, output) {
       HTML(paste0("Maximum Average Temperature", br(),
                   box_data[3,3], br(),
                   box_data[3,2], ", ", box_data[3,1])),
-      color = "red"
+      color = "red",
+      icon = icon("upload", lib = "glyphicon")
     )
   })
   
@@ -28,7 +30,8 @@ server <- function(input, output) {
       HTML(paste0("Maximum Rain", br(),
                   box_data[11,3], br(),
                   box_data[11,2], ", ", box_data[11,1])),
-      color = "red"
+      color = "red",
+      icon = icon("upload", lib = "glyphicon")
     )
   })
   
@@ -38,7 +41,8 @@ server <- function(input, output) {
       HTML(paste0("Maximum Humidity", br(),
                   box_data[5,3], br(),
                   box_data[5,2], ", ", box_data[5,1])),
-      color = "red"
+      color = "red",
+      icon = icon("upload", lib = "glyphicon")
     )
   })
   
@@ -48,7 +52,8 @@ server <- function(input, output) {
       HTML(paste0("Minimum Dry Bulb", br(),
                   box_data[2,3], br(),
                   box_data[2,2], ", ", box_data[2,1])),
-      color = "green"
+      color = "green",
+      icon = icon("download", lib = "glyphicon")
     )
   })
   
@@ -58,7 +63,8 @@ server <- function(input, output) {
       HTML(paste0("Minimum Average Temperature", br(),
                   box_data[4,3], br(),
                   box_data[4,2], ", ", box_data[4,1])),
-      color = "green"
+      color = "green",
+      icon = icon("download", lib = "glyphicon")
     )
   })
   
@@ -68,7 +74,8 @@ server <- function(input, output) {
       HTML(paste0("Minumum Rain", br(),
                   box_data[12,3], br(),
                   box_data[12,2], ", ", box_data[12,1])),
-      color = "green"
+      color = "green",
+      icon = icon("download", lib = "glyphicon")
     )
   })
   
@@ -78,23 +85,39 @@ server <- function(input, output) {
       HTML(paste0("Minimum Humidity", br(),
                   box_data[6,3], br(),
                   box_data[6,2], ", ", box_data[6,1])),
-      color = "green"
+      color = "green",
+      icon = icon("download", lib = "glyphicon")
     )
   })
   
-  output$avgtempseries <- renderHighchart({
+  output$dashline <- renderHighchart({
     data_new %>% 
       as_tibble() %>% 
-      filter(key == "Avg") %>% 
+      filter(key == input$dashlinevariable) %>% 
       group_by(Year) %>% 
-      summarise(`Aggregated Value` = mean(`Aggregated Value`)) %>% 
+      summarise(`Aggregated Value` = ifelse(input$dashlinevariable == "Rain",
+                                            sum(`Aggregated Value`),
+                                            mean(`Aggregated Value`))) %>% 
       hchart(
         'line',
         hcaes(x = Year, y = `Aggregated Value`),
-        name = "Average Temperature"
+        name = input$dashlinevariable
       ) %>% 
       hc_xAxis(title = list(text = "")) %>% 
-      hc_yAxis(title = list(text = "Average Temperature"))
+      hc_yAxis(title = list(text = ""))
+  })
+  
+  output$dashboxplot <- renderPlotly({
+    ggplotly(
+      data_new %>% 
+        as_tibble() %>% 
+        filter(key == input$dashboxvariable) %>% 
+        ggplot(aes(Month, `Aggregated Value`)) +
+        geom_boxplot(fill = "seagreen4") +
+        labs(x = "") +
+        theme_minimal()
+    ) %>% 
+      config(displayModeBar = F)
   })
   
   output$map <- renderLeaflet({
@@ -115,7 +138,8 @@ server <- function(input, output) {
       arrange(desc(`Aggregated Value`)) %>% 
       hchart(
         'bar',
-        hcaes(Division, `Aggregated Value`)
+        hcaes(Division, `Aggregated Value`),
+        name = "Value"
       ) %>% 
       hc_xAxis(title = list(text = ""))
   )

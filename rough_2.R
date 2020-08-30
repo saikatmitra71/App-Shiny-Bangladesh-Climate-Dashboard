@@ -74,6 +74,40 @@ data_new %>%
   group_by(key, Type) %>% 
   slice(1)
 
+data_new %>% 
+  as_tibble() %>% 
+  filter(key == "Avg") %>% 
+  hchart('hcboxplot',
+         hcaes(Month, `Aggregated Value`))
 
+data_new %>% 
+  as_tibble() %>% 
+  filter(key == "Avg") %>% 
+  hcboxplot(
+  y = .$Month,
+  x = .$`Aggregated Value`
+  ) %>% 
+  hc_chart(type = "column")
+
+hcboxplot(
+  y = data_new$Month,
+  x = data_new$`Aggregated Value`
+)
+
+data_new %>% 
+  as_tibble() %>% 
+  filter(key == "Avg") %>% 
+  data_to_boxplot(
+    variable = `Aggregated Value`,
+    group_var = Month
+  )
+
+data_new %>% 
+  as_tibble() %>% 
+  filter(key == "Avg") %>% 
+  ggplot(aes(Month, `Aggregated Value`)) +
+  geom_boxplot(fill = "seagreen4") +
+  labs(x = "") +
+  theme_minimal()
 
 
