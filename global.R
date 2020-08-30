@@ -9,8 +9,9 @@ library(ggplot2)
 library(tmap)
 library(leaflet)
 library(plotly)
+library(highcharter)
 
-data <- read.csv("www/master.csv")
+data <- read.csv("www/master.csv", stringsAsFactors = FALSE)
 shape <- read_sf("www/doc.kml")
 
 shape_div <- shape %>% 
@@ -38,3 +39,12 @@ data_new <- data %>%
   left_join(simp_div, by = c("Division" = "Name")) %>% 
   st_as_sf()
 
+box_data <- data_new %>% 
+  as_tibble() %>% 
+  mutate(Month = as.character(Month)) %>% 
+  group_by(key) %>% 
+  filter(`Aggregated Value` == max(`Aggregated Value`) | `Aggregated Value` == min(`Aggregated Value`)) %>% 
+  mutate(Type = ifelse(`Aggregated Value` == max(`Aggregated Value`), "Max", "Min")) %>% 
+  group_by(key, Type) %>% 
+  slice(1) %>% 
+  select(Year, Month, Division, key, Type, `Aggregated Value`)

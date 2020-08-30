@@ -106,7 +106,17 @@ ui <- dashboardPage(
   ),
   dashboardBody(
     tabItems(
-      tabItem(tabName = "dashboard"),
+      tabItem(tabName = "dashboard",
+              h1("At A Glance"),
+              fluidRow(valueBoxOutput("maxdry", width = 3),
+                       valueBoxOutput("maxavg", width = 3),
+                       valueBoxOutput("maxrain", width = 3),
+                       valueBoxOutput("maxhumidity", width = 3),
+                       valueBoxOutput("mindry", width = 3),
+                       valueBoxOutput("minavg", width = 3),
+                       valueBoxOutput("minrain", width = 3),
+                       valueBoxOutput("minhumidity", width = 3)),
+              fluidRow(box("Temperature Trend", highchartOutput("avgtempseries")))),
       tabItem(tabName = "map",
               h2("The Map"),
               leafletOutput("map")
@@ -114,7 +124,7 @@ ui <- dashboardPage(
       
       tabItem(tabName = "plots",
               h2("Static Plots"),
-              box(plotOutput("barplot")),
+              box(highchartOutput("barplot")),
               box(plotlyOutput("boxplot"))
       )
     )

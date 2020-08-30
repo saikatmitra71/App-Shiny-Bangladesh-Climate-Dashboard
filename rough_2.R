@@ -34,3 +34,46 @@ ggplotly(data_new %>%
            geom_bar(stat = "identity", fill = "steelblue", width = 0.5) +
            labs(x = "", y = "Divisions") +
            theme_minimal())
+
+data_new %>% 
+  filter(key == "Avg") %>% 
+  group_by(Year) %>% 
+  summarise(`Aggregated Value` = mean(`Aggregated Value`)) %>% 
+  hchart(
+    'line',
+    hcaes(Year, `Aggregated Value`),
+    name = "Average Temperature"
+  ) %>% 
+  hc_xAxis(title = list(text = "")) %>% 
+  hc_yAxis(title = list(text = "Average Temperature"))
+
+data_new %>% 
+  filter(key == input$variable & Year == input$year & Month == input$month) %>% 
+  arrange(desc(`Aggregated Value`)) %>% 
+  hchart(
+    'bar',
+    hcaes(Division, `Aggregated Value`)
+  ) %>% 
+  hc_xAxis(title = list(text = ""))
+
+data %>% 
+  mutate(Month = factor(Month, levels = month.name)) %>% 
+  gather("key", "Aggregated Value", Air_temp, Avg, Min, Max, Rain, Humidity) %>% 
+  mutate(`Aggregated Value` = as.numeric(`Aggregated Value`)) %>% 
+  filter(key == input$variable & Year == input$year & Month == input$month) %>% 
+  ggplot(aes(Division, `Aggregated Value`)) +
+  geom_boxplot(fill = "seagreen4") +
+  labs(x = "", y = "", title = "Distribution across Divisions") +
+  theme_minimal()
+
+data_new %>% 
+  as_tibble() %>% 
+  group_by(key) %>% 
+  filter(`Aggregated Value` == max(`Aggregated Value`) | `Aggregated Value` == min(`Aggregated Value`)) %>% 
+  mutate(Type = ifelse(`Aggregated Value` == max(`Aggregated Value`), "Max", "Min")) %>% 
+  group_by(key, Type) %>% 
+  slice(1)
+
+
+
+
