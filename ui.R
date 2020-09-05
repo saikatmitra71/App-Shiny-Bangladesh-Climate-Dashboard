@@ -108,10 +108,12 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName = "dashboard",
               h1("At A Glance"),
-              fluidRow(valueBoxOutput("maxdry", width = 3),
+              fluidRow(tags$head(tags$style(HTML(".small-box.bg-red {height: 125px; background-color: #be1a1a !important; color: #000000 !important;}"))),
+                       valueBoxOutput("maxdry", width = 3),
                        valueBoxOutput("maxavg", width = 3),
                        valueBoxOutput("maxrain", width = 3),
-                       valueBoxOutput("maxhumidity", width = 3),
+                       valueBoxOutput("maxhumidity", width = 3)),
+              fluidRow(tags$head(tags$style(HTML(".small-box.bg-green {height: 125px; background-color: #2e8b57 !important; color: #000000 !important;}"))),
                        valueBoxOutput("mindry", width = 3),
                        valueBoxOutput("minavg", width = 3),
                        valueBoxOutput("minrain", width = 3),
@@ -142,7 +144,7 @@ ui <- dashboardPage(
                            plotlyOutput("dashboxplot")))),
       tabItem(tabName = "map",
               h2("The Map"),
-              leafletOutput("map")
+              column(box(leafletOutput("map", width = "100%", height = "1000px"), width = 12), width = 12)
       ),
       
       tabItem(tabName = "plots",
