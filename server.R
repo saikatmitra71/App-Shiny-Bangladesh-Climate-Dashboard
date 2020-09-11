@@ -26,8 +26,9 @@ server <- function(input, output) {
   
   output$maxrain <- renderValueBox({
     valueBox(
-      paste0(round(box_data[11, 6], 2), "mm", sep = ""),
-      HTML(paste0("Maximum Rain", br(),
+      value = tags$p(paste0(round(box_data[11, 6], 2), "mm", sep = ""),
+                     style = "font-size: 95%;"),
+      tags$p(paste0("Maximum Rain", br(),
                   box_data[11,3], br(),
                   box_data[11,2], ", ", box_data[11,1])),
       color = "red",
@@ -113,7 +114,7 @@ server <- function(input, output) {
         as_tibble() %>% 
         filter(key == input$dashboxvariable) %>% 
         ggplot(aes(Month, `Aggregated Value`)) +
-        geom_boxplot(fill = "seagreen4") +
+        geom_boxplot(fill = "dodgerblue1") +
         labs(x = "") +
         theme_minimal()
     ) %>% 
