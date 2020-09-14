@@ -4,7 +4,7 @@ server <- function(input, output) {
   
   observe({
     showNotification(
-      ui = "Values of all the variables are Averaged by month for aggreagtion, except Rainfall: it was summed.",
+      ui = "Values of all the variables are Averaged by month for aggregation, except Rainfall: it was summed.",
       duration = NULL
     )
   })
@@ -39,7 +39,7 @@ server <- function(input, output) {
     valueBox(
       tags$p(paste0(round(box_data[11, 6], 2), "mm", sep = ""),
              style = "font-size: 70%; line-height: 50%;"),
-      tags$p(HTML(paste0("Maximum Rain", br(),
+      tags$p(HTML(paste0("Maximum Rainfall", br(),
                   box_data[11,3], br(),
                   box_data[11,2], ", ", box_data[11,1])),
              style = "font-size: 100%; line-height: 100%;"),
@@ -91,7 +91,7 @@ server <- function(input, output) {
     valueBox(
       tags$p(paste0(round(box_data[12, 6], 2), "mm", sep = ""),
              style = "font-size: 70%; line-height: 50%;"),
-      tags$p(HTML(paste0("Minumum Rain", br(),
+      tags$p(HTML(paste0("Minimum Rainfall", br(),
                   box_data[12,3], br(),
                   box_data[12,2], ", ", box_data[12,1])),
              style = "font-size: 100%; line-height: 100%;"),
