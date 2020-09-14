@@ -12,18 +12,7 @@ library(plotly)
 library(highcharter)
 
 data <- read.csv("www/master.csv", stringsAsFactors = FALSE)
-shape <- read_sf("www/doc.kml")
-
-shape_div <- shape %>% 
-  as_tibble() %>% 
-  dplyr::select(Name, geometry) %>% 
-  spread(key = "Name", value = "geometry") %>% 
-  mutate(Dhaka = st_union(.$Dhaka, .$Mymensingh)) %>% 
-  dplyr::select(-Mymensingh) %>% 
-  gather("Name", "geometry") %>% 
-  st_as_sf()
-
-simp_div <- ms_simplify(shape_div, keep = 0.01, keep_shapes = TRUE)
+simp_div <- read_sf("www/shape.shp")
 
 data_new <- data %>% 
   mutate(Month = factor(Month, levels = month.name)) %>% 

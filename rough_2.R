@@ -110,4 +110,15 @@ data_new %>%
   labs(x = "") +
   theme_minimal()
 
+data_new %>% 
+  filter(key == "Avg" & Year == 1981 & Month == "January") %>% 
+  dplyr::select(-key, -Year, -Month) %>% 
+  tm_shape() +
+  tm_fill(col = "Aggregated Value") +
+  tm_borders()
 
+write_sf(simp_div, "shape.shp")
+
+data %>% 
+  select(Division, Year, Month, Air_temp, Max, Min, Avg, Rain, Humidity) %>% 
+  write.csv("master.csv")

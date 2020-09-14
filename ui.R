@@ -1,7 +1,20 @@
 
 
 ui <- dashboardPage(
-  dashboardHeader(title = "Bangladesh Climate"),
+  dashboardHeader(
+    title = "Bangladesh Climate",
+    dropdownMenu(
+      type = "messages",
+      messageItem(
+        from = tags$p("Created By",
+                      style = "font-size: 80%; line-height: 120%; color: #808080"),
+        message = tags$p("Saikat Mitra",
+                         style = "font-size: 120%; line-height: 0%; color: #000000"),
+        icon = icon("linkedin-square"),
+        href = "https://www.linkedin.com/in/saikat-mitra-38b59a192/"
+      )
+    )
+  ),
   dashboardSidebar(
     sidebarMenu(id = "menu",
                 menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
@@ -108,12 +121,12 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName = "dashboard",
               h1("At A Glance"),
-              fluidRow(tags$head(tags$style(HTML(".small-box.bg-red {height: 65px; background-color: #1E90FF !important; color: #000000 !important;} "))),
+              fluidRow(tags$head(tags$style(HTML(".small-box.bg-red {height: 80px; background-color: #1E90FF  !important; color: #273746 !important;} .small-box .icon-large {top: 0px;}"))),
                        valueBoxOutput("maxdry", width = 3),
                        valueBoxOutput("maxavg", width = 3),
                        valueBoxOutput("maxrain", width = 3),
                        valueBoxOutput("maxhumidity", width = 3)),
-              fluidRow(tags$head(tags$style(HTML(".small-box.bg-green {height: 65px; background-color: #ADD8E6 !important; color: #000000 !important;}"))),
+              fluidRow(tags$head(tags$style(HTML(".small-box.bg-green {height: 80px; background-color: #ADD8E6 !important; color: #273746 !important;}"))),
                        valueBoxOutput("mindry", width = 3),
                        valueBoxOutput("minavg", width = 3),
                        valueBoxOutput("minrain", width = 3),
@@ -144,13 +157,27 @@ ui <- dashboardPage(
                            plotlyOutput("dashboxplot")))),
       tabItem(tabName = "map",
               h2("The Map"),
-              column(box(leafletOutput("map", width = "100%", height = "1000px"), width = 12), width = 12)
+              fluidRow(
+                column(
+                  box(
+                    leafletOutput("map", width = "100%", height = "600px"),
+                    width = 12
+                  ),
+                  width = 12
+                )
+              )
       ),
       
       tabItem(tabName = "plots",
               h2("Static Plots"),
-              box(highchartOutput("barplot")),
-              box(plotlyOutput("boxplot"))
+              box(
+                title = "Aggregated Values across Divisions",
+                highchartOutput("barplot")
+              ),
+              box(
+                title = "Values across Divisions", 
+                plotlyOutput("boxplot")
+              )
       )
     )
   )
