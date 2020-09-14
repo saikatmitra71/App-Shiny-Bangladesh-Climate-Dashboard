@@ -14,11 +14,11 @@ server <- function(input, output) {
       tags$p(HTML(paste0(round(box_data[1, 6], 2), "&#8451")),
              style = "font-size: 70%; line-height: 50%;"),
       tags$p(HTML(paste0("Maximum Dry Bulb", br(),
-                  box_data[1,3], br(),
+                  box_data[1,3], " Division",br(),
                   box_data[1,2], ", ", box_data[1,1])),
              style = "font-size: 100%; line-height: 100%;"),
       color = "red",
-      icon = icon("upload", lib = "glyphicon")
+      icon = icon("cloud-sun-rain", lib = "font-awesome")
     )
   })
   
@@ -27,11 +27,11 @@ server <- function(input, output) {
       tags$p(HTML(paste0(round(box_data[3, 6], 2), "&#8451")),
              style = "font-size: 70%; line-height: 50%;"),
       tags$p(HTML(paste0("Maximum Average Temperature", br(),
-                  box_data[3,3], br(),
+                  box_data[3,3], " Division", br(),
                   box_data[3,2], ", ", box_data[3,1])),
              style = "font-size: 100%; line-height: 100%;"),
       color = "red",
-      icon = icon("upload", lib = "glyphicon")
+      icon = icon("cloud-sun-rain", lib = "font-awesome")
     )
   })
   
@@ -40,11 +40,11 @@ server <- function(input, output) {
       tags$p(paste0(round(box_data[11, 6], 2), "mm", sep = ""),
              style = "font-size: 70%; line-height: 50%;"),
       tags$p(HTML(paste0("Maximum Rainfall", br(),
-                  box_data[11,3], br(),
+                  box_data[11,3], " Division", br(),
                   box_data[11,2], ", ", box_data[11,1])),
              style = "font-size: 100%; line-height: 100%;"),
       color = "red",
-      icon = icon("upload", lib = "glyphicon")
+      icon = icon("cloud-sun-rain", lib = "font-awesome")
     )
   })
   
@@ -53,11 +53,11 @@ server <- function(input, output) {
       tags$p(paste0(round(box_data[5, 6], 2), "%", sep = ""),
              style = "font-size: 70%; line-height: 50%;"),
       tags$p(HTML(paste0("Maximum Humidity", br(),
-                  box_data[5,3], br(),
+                  box_data[5,3], " Division", br(),
                   box_data[5,2], ", ", box_data[5,1])),
              style = "font-size: 100%; line-height: 100%;"),
       color = "red",
-      icon = icon("upload", lib = "glyphicon")
+      icon = icon("cloud-sun-rain", lib = "font-awesome")
     )
   })
   
@@ -66,11 +66,11 @@ server <- function(input, output) {
       tags$p(HTML(paste0(round(box_data[2, 6], 2), "&#8451")),
              style = "font-size: 70%; line-height: 50%;"),
       tags$p(HTML(paste0("Minimum Dry Bulb", br(),
-                  box_data[2,3], br(),
+                  box_data[2,3], " Division", br(),
                   box_data[2,2], ", ", box_data[2,1])),
              style = "font-size: 100%; line-height: 100%;"),
       color = "green",
-      icon = icon("download", lib = "glyphicon")
+      icon = icon("cloud-sun-rain", lib = "font-awesome")
     )
   })
   
@@ -79,11 +79,11 @@ server <- function(input, output) {
       tags$p(HTML(paste0(round(box_data[4, 6], 2), "&#8451")),
              style = "font-size: 70%; line-height: 50%;"),
       tags$p(HTML(paste0("Minimum Average Temperature", br(),
-                  box_data[4,3], br(),
+                  box_data[4,3], " Division", br(),
                   box_data[4,2], ", ", box_data[4,1])),
              style = "font-size: 100%; line-height: 100%;"),
       color = "green",
-      icon = icon("download", lib = "glyphicon")
+      icon = icon("cloud-sun-rain", lib = "font-awesome")
     )
   })
   
@@ -92,11 +92,11 @@ server <- function(input, output) {
       tags$p(paste0(round(box_data[12, 6], 2), "mm", sep = ""),
              style = "font-size: 70%; line-height: 50%;"),
       tags$p(HTML(paste0("Minimum Rainfall", br(),
-                  box_data[12,3], br(),
+                  box_data[12,3], " Division", br(),
                   box_data[12,2], ", ", box_data[12,1])),
              style = "font-size: 100%; line-height: 100%;"),
       color = "green",
-      icon = icon("download", lib = "glyphicon")
+      icon = icon("cloud-sun-rain", lib = "font-awesome")
     )
   })
   
@@ -105,11 +105,11 @@ server <- function(input, output) {
       tags$p(paste0(round(box_data[6, 6], 2), "%", sep = ""),
              style = "font-size: 70%; line-height: 50%;"),
       tags$p(HTML(paste0("Minimum Humidity", br(),
-                  box_data[6,3], br(),
+                  box_data[6,3], " Division", br(),
                   box_data[6,2], ", ", box_data[6,1])),
              style = "font-size: 100%; line-height: 100%;"),
       color = "green",
-      icon = icon("download", lib = "glyphicon")
+      icon = icon("cloud-sun-rain", lib = "font-awesome")
     )
   })
   
@@ -124,10 +124,12 @@ server <- function(input, output) {
       hchart(
         'line',
         hcaes(x = Year, y = `Aggregated Value`),
-        name = "Value"
+        name = "Value",
+        regression = TRUE
       ) %>% 
       hc_xAxis(title = list(text = "")) %>% 
-      hc_yAxis(title = list(text = ""))
+      hc_yAxis(title = list(text = "")) %>% 
+      hc_add_dependency("plugins/highcharts-regression.js")
   })
   
   output$dashboxplot <- renderPlotly({
@@ -156,30 +158,6 @@ server <- function(input, output) {
     tmap_leaflet(map, mode = "view", show = TRUE, add.titles = TRUE)
   })
   
-  output$barplot <- renderHighchart(
-    data_new %>% 
-      filter(key == input$variable & Year == input$year & Month == input$month) %>% 
-      arrange(desc(`Aggregated Value`)) %>% 
-      hchart(
-        'bar',
-        hcaes(Division, `Aggregated Value`),
-        name = "Value"
-      ) %>% 
-      hc_xAxis(title = list(text = ""))
-  )
-  
-  output$boxplot <- renderPlotly(
-    ggplotly(data %>% 
-               mutate(Month = factor(Month, levels = month.name)) %>% 
-               gather("key", "Aggregated Value", Air_temp, Avg, Min, Max, Rain, Humidity) %>% 
-               mutate(`Aggregated Value` = as.numeric(`Aggregated Value`)) %>% 
-               filter(key == input$variable & Year == input$year & Month == input$month) %>% 
-               ggplot(aes(Division, `Aggregated Value`)) +
-               geom_boxplot(fill = "dodgerblue1") +
-               labs(x = "", y = "") +
-               theme_minimal()) %>% 
-      config(displayModeBar = F)
-  )
 }
 
 

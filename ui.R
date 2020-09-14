@@ -18,8 +18,7 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(id = "menu",
                 menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-                menuItem("The Map", tabName = "map", icon = icon("th")),
-                menuItem("Static Plots", tabName = "plots", icon = icon("bar-chart-o"))
+                menuItem("The Map", tabName = "map", icon = icon("th"))
     ),
     
     conditionalPanel(
@@ -121,7 +120,7 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName = "dashboard",
               h1("At A Glance"),
-              fluidRow(tags$head(tags$style(HTML(".small-box.bg-red {height: 80px; background-color: #1E90FF  !important; color: #273746 !important;} .small-box .icon-large {top: 0px;}"))),
+              fluidRow(tags$head(tags$style(HTML(".small-box.bg-red {height: 80px; background-color: #1E90FF  !important; color: #273746 !important;} .small-box .icon-large {top: -9px; right: 5px;}"))),
                        valueBoxOutput("maxdry", width = 3),
                        valueBoxOutput("maxavg", width = 3),
                        valueBoxOutput("maxrain", width = 3),
@@ -165,18 +164,6 @@ ui <- dashboardPage(
                   ),
                   width = 12
                 )
-              )
-      ),
-      
-      tabItem(tabName = "plots",
-              h2("Static Plots"),
-              box(
-                title = "Aggregated Values across Divisions",
-                highchartOutput("barplot")
-              ),
-              box(
-                title = "Values across Divisions", 
-                plotlyOutput("boxplot")
               )
       )
     )
